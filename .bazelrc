@@ -1,0 +1,4 @@
+build --cxxopt='-std=c++17'
+build --cxxopt='-DDENDI239'
+build --host_cxxopt='-std=c++17'
+build --host_cxxopt='-DDENDI239'
