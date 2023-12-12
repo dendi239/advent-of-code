@@ -51,6 +51,8 @@ def count_matches(line: str) -> int:
         if i_arr == 0:  # part == 0 by this point
             return 0 if any(c == "#" for c in s[:i_s]) else 1
 
+        # Makes the whole dp one N^2 heavier.
+        # Who cares as long as it runs in a few seconds time?
         return sum(
             dp(i_p, i_arr - 1, arr[i_arr - 1])
             for i_p in range(i_s)
