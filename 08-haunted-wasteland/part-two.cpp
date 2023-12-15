@@ -37,12 +37,12 @@ auto GetGraph(std::string_view path) -> std::pair<Graph, std::vector<Command>> {
   std::vector<Command> commands;
   for (auto c : commands_str) {
     switch (c) {
-    case 'L':
-      commands.push_back(Command::LEFT);
-      break;
-    case 'R':
-      commands.push_back(Command::RIGHT);
-      break;
+      case 'L':
+        commands.push_back(Command::LEFT);
+        break;
+      case 'R':
+        commands.push_back(Command::RIGHT);
+        break;
     }
   }
 
@@ -60,8 +60,7 @@ auto GetGraph(std::string_view path) -> std::pair<Graph, std::vector<Command>> {
 
   std::unordered_map<NodeID, Links> links;
   while (std::getline(f, commands_str)) {
-    if (commands_str.size() < 16)
-      continue;
+    if (commands_str.size() < 16) continue;
 
     auto node = get_node_id(commands_str.substr(0, 3));
     auto left = get_node_id(commands_str.substr(7, 3));
@@ -78,14 +77,15 @@ auto GetGraph(std::string_view path) -> std::pair<Graph, std::vector<Command>> {
   return {Graph{links_vec, labels}, commands};
 }
 
-template <size_t commands_size> class CycleGraph {
+template <size_t commands_size>
+class CycleGraph {
   struct NodeInfo {
     NodeID next;
     int cycle_id = -1;
     std::bitset<commands_size> terminal;
   };
 
-public:
+ public:
   CycleGraph(size_t size) : nodes_(size) {}
 
   auto next(NodeID node) -> NodeID { return nodes_[node].next; }
@@ -114,13 +114,14 @@ public:
     cycle_len_ = std::move(cycle_len);
   }
 
-private:
+ private:
   std::vector<NodeInfo> nodes_;
   std::vector<int> cycle_len_;
 };
 
-template <class V> class ShortMap {
-public:
+template <class V>
+class ShortMap {
+ public:
   ShortMap(size_t size) : data_(size) {}
 
   auto operator[](size_t index) const { return data_[index]; }
@@ -138,7 +139,7 @@ public:
     }
   }
 
-private:
+ private:
   std::vector<V> data_;
   std::vector<std::pair<size_t, V>> changes_;
 };
@@ -178,8 +179,7 @@ auto BuildCycleGraph(const Graph &graph, const std::vector<Command> &commands,
     }
 
     // Encounter old node.
-    if (!used[curr])
-      continue;
+    if (!used[curr]) continue;
 
     const int cycle_id = static_cast<int>(cycle_len.size());
     cycle_len.push_back(idx - index[curr]);
@@ -194,11 +194,11 @@ auto BuildCycleGraph(const Graph &graph, const std::vector<Command> &commands,
   return cg;
 }
 
-} // namespace haunted_wasteland
+}  // namespace haunted_wasteland
 
-template <class Int> auto LrpGcd(Int a, Int b) -> std::pair<Int, Int> {
-  if (!a || !b)
-    return std::pair(+1, +1);
+template <class Int>
+auto LrpGcd(Int a, Int b) -> std::pair<Int, Int> {
+  if (!a || !b) return std::pair(+1, +1);
   auto [x, y] = LrpGcd(b, a % b);
   return {y, x - (a / b) * y};
 }
@@ -233,20 +233,20 @@ size_t ChineeseRemainderTheorem(const std::vector<Remainder> &rems) {
   return result;
 }
 
-template <size_t N> size_t count_trailingzero(std::bitset<N> b) {
+template <size_t N>
+size_t count_trailingzero(std::bitset<N> b) {
   // source: https://stackoverflow.com/a/72153216
 
-  if (b.none())
-    return N; // The whole bitset was zero
+  if (b.none()) return N;  // The whole bitset was zero
 
-  const decltype(b) mask(-1ULL); // Mask to get the lowest unsigned long long
-  size_t tz = 0;                 // The number of trailing zero bits
+  const decltype(b) mask(-1ULL);  // Mask to get the lowest unsigned long long
+  size_t tz = 0;                  // The number of trailing zero bits
   const int width = sizeof(unsigned long long) * CHAR_BIT;
   do {
-    auto lsw = (b & mask).to_ullong(); // The least significant word
-    auto lsb = __builtin_ctzll(lsw);   // Position of the least significant bit
+    auto lsw = (b & mask).to_ullong();  // The least significant word
+    auto lsb = __builtin_ctzll(lsw);    // Position of the least significant bit
 
-    if (lsb < width) // Found the first set bit from right
+    if (lsb < width)  // Found the first set bit from right
       return tz + lsb;
 
     // A set bit was not found because the lsw is all zero
@@ -299,7 +299,7 @@ signed main() {
   const size_t n = graph.Size();
   ShortMap<int> used(n);
 
-  // This is research tool to check that each source can encounter 
+  // This is research tool to check that each source can encounter
   // only a single terminal state.
   for (auto source : sources) {
     std::cout << "Start: " << graph.labels[source] << "\n";
@@ -319,11 +319,9 @@ signed main() {
   auto common_bit = [&]() -> int {
     auto mask = std::bitset<kCommands>();
     mask.flip();
-    for (auto source : sources)
-      mask &= cg.terminal_mask(source);
+    for (auto source : sources) mask &= cg.terminal_mask(source);
 
-    if (mask.any())
-      return count_trailingzero(mask);
+    if (mask.any()) return count_trailingzero(mask);
     return -1;
   };
 
@@ -337,8 +335,7 @@ signed main() {
     }
 
     steps += commands.size();
-    for (auto &source : sources)
-      source = cg.next(source);
+    for (auto &source : sources) source = cg.next(source);
   }
 
   if (found) {
@@ -359,8 +356,7 @@ signed main() {
   auto cycle_steps = ChineeseRemainderTheorem(rems);
   for (auto &source : sources) {
     size_t steps = cycle_steps % cg.cycle_len(source);
-    for (size_t i = 0; i < steps; ++i)
-      source = cg.next(source);
+    for (size_t i = 0; i < steps; ++i) source = cg.next(source);
   }
 
   steps += commands.size() * cycle_steps;

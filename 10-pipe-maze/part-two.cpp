@@ -87,7 +87,8 @@ void BuildGraph(const TableEnumerator &t, GraphBuilder *builder) {
              T(rights, lefts, [&](ssize_t x) { return t.Right(x); }),
          }) {
       if (dir(i) != -1) {
-        std::cerr << "  dir: " << t.F(dir(i)) << " sym: " << t.At(dir(i)) << "\n";
+        std::cerr << "  dir: " << t.F(dir(i)) << " sym: " << t.At(dir(i))
+                  << "\n";
       }
       if (opts.count(t.At(i)) && dir(i) != -1 && oposite.count(t.At(dir(i)))) {
         builder->OnConnect(t.X(i), t.Y(i), t.X(dir(i)), t.Y(dir(i)));
@@ -180,7 +181,8 @@ struct DoubleGraphBuilder : GraphBuilder {
   virtual void OnCreate(size_t n, size_t m) override { *g = G(t.Size()); }
   virtual void OnConnect(ssize_t x1, ssize_t y1, ssize_t x2,
                          ssize_t y2) override {
-    std::cerr << "  Connect " << x1 << ", " << y1 << " and " << x2 << " " << y2 << "\n";
+    std::cerr << "  Connect " << x1 << ", " << y1 << " and " << x2 << " " << y2
+              << "\n";
     auto fst = t.Index(2 * x1, 2 * y1);
     auto snd = t.Index(x1 + x2, y1 + y2);
     auto trd = t.Index(2 * x2, 2 * y2);
@@ -223,8 +225,7 @@ signed main() {
   auto cycle = FindSingleCycle(start, g, [&](ssize_t i) {
     std::cerr << "Enter " << dt.F(i);
     std::cerr << "  Edges to: ";
-    for (auto v : g[i])
-      std::cerr << " " << dt.F(v);
+    for (auto v : g[i]) std::cerr << " " << dt.F(v);
     std::cerr << std::endl;
   });
   std::vector<int> is_cycle(g.size());
@@ -256,8 +257,7 @@ signed main() {
   size_t answer = 0;
   for (ssize_t y = 0; y < dt.n; ++y) {
     for (ssize_t x = 0; x < dt.m; ++x) {
-      if (x % 2 == 0 && y % 2 == 0 && is_cycle[dt.Index(x, y)] == 0)
-        ++answer;
+      if (x % 2 == 0 && y % 2 == 0 && is_cycle[dt.Index(x, y)] == 0) ++answer;
       std::cerr << ".bx"[is_cycle[dt.Index(x, y)]];
     }
     std::cerr << "\n";

@@ -2,9 +2,9 @@
 #include <iostream>
 #include <sstream>
 
-template <class T, class F> T BinSearch(T l, T r, F f) {
-  for (T m; m = (l + r) / 2, m != l && m != r;)
-    (f(m) ? l : r) = m;
+template <class T, class F>
+T BinSearch(T l, T r, F f) {
+  for (T m; m = (l + r) / 2, m != l && m != r;) (f(m) ? l : r) = m;
   return l;
 }
 
