@@ -6,7 +6,8 @@ def find_sym_rows(board: list[str]) -> list[int]:
             cl != cr
             for l, r in zip(board[i - 1 :: -1], board[i:])
             for cl, cr in zip(l, r)
-        ) == 1
+        )
+        == 1
     ]
 
 

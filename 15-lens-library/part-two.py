@@ -38,13 +38,10 @@ class Box:
     def remove(self, lens: Lens) -> None:
         for i, l in enumerate(self.order):
             if l.label == lens.label:
-                self.order = self.order[:i] + self.order[i + 1:]
+                self.order = self.order[:i] + self.order[i + 1 :]
 
     def total_power(self) -> int:
-        return sum(
-            (i + 1) * lens.power
-            for i, lens in enumerate(self.order)
-        )
+        return sum((i + 1) * lens.power for i, lens in enumerate(self.order))
 
     def __bool__(self):
         return bool(self.order)
@@ -53,7 +50,7 @@ class Box:
 def main() -> None:
     with open("15-lens-library/input.txt") as f:
         commands = [s for st in f.read().split(",") if (s := st.strip())]
-    
+
     boxes = [Box() for _ in range(256)]
     for cmd in commands:
         if cmd[-1] == "-":
@@ -72,7 +69,6 @@ def main() -> None:
         print()
 
     print(sum((i + 1) * box.total_power() for i, box in enumerate(boxes)))
-
 
 
 if __name__ == "__main__":

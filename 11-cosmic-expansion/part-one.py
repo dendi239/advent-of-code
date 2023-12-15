@@ -31,6 +31,5 @@ def main() -> None:
     print(sum_dist(list(xs.items())) + sum_dist(list(ys.items())))
 
 
-
 if __name__ == "__main__":
     main()

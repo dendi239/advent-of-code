@@ -35,15 +35,16 @@ def canonical_hand(hand: str) -> str:
 
 def pick_jockers(hand: str) -> str:
     indices = [i for i in range(len(hand)) if hand[i] == "i"]
+
     def replace(replacements):
         chars = list(hand)
         for i, r in zip(indices, replacements):
             chars[i] = r
-        return ''.join(chars)
+        return "".join(chars)
 
     return max(
         map(replace, itertools.combinations(BY_STRENGTH, len(indices))),
-        key=canonical_hand
+        key=canonical_hand,
     )
 
 

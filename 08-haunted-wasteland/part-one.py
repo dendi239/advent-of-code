@@ -10,7 +10,7 @@ def main() -> None:
         pattern = re.compile(r"(\w+) = \((\w+), (\w+)\)")
 
         for line in f:
-            if (m := pattern.fullmatch(line.strip())):
+            if m := pattern.fullmatch(line.strip()):
                 node = m.group(1)
                 left = m.group(2)
                 right = m.group(3)
@@ -41,10 +41,10 @@ def main() -> None:
 
         if next_node in used:
             break
-        
+
         answer += len(commands)
         curr = next_node
-    
+
     print(answer)
 
 

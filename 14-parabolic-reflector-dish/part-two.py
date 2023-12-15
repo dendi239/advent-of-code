@@ -10,7 +10,7 @@ SOUTH = 1
 
 
 def load_row(row: str) -> int:
-    return sum(i for i, c in zip(range(len(row), -1, -1), row) if c == 'O')
+    return sum(i for i, c in zip(range(len(row), -1, -1), row) if c == "O")
 
 
 def tilt_row(row: str) -> str:

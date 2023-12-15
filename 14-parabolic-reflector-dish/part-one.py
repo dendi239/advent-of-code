@@ -3,13 +3,13 @@ import logging
 
 
 def load_row(row: str) -> int:
-    pivvots = [0] + [i + 1 for i, c in enumerate(row) if c == '#'] + [len(row)]
+    pivvots = [0] + [i + 1 for i, c in enumerate(row) if c == "#"] + [len(row)]
     total = 0
 
     for start, end in zip(pivvots, pivvots[1:]):
         i_write = start
         for i in range(start, end):
-            if row[i] == 'O':
+            if row[i] == "O":
                 total += len(row) - i_write
                 i_write += 1
                 logging.debug(f"row: '{row}', writen: {i_write} for {i}")

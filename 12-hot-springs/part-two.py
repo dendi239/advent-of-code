@@ -8,7 +8,7 @@ def count_matches(line: str) -> int:
     s, arr_str = line.split()
 
     arr = [int(x) for x in arr_str.split(",")]
-    s = '?'.join([s] * 5)
+    s = "?".join([s] * 5)
     arr *= 5
 
     def logged(f):
@@ -56,7 +56,7 @@ def count_matches(line: str) -> int:
         return sum(
             dp(i_p, i_arr - 1, arr[i_arr - 1])
             for i_p in range(i_s)
-            if all(s[i] != '#' for i in range(i_p, i_s))
+            if all(s[i] != "#" for i in range(i_p, i_s))
         )
 
     ans = dp(len(s), len(arr), 0) + dp(len(s), len(arr) - 1, arr[-1])
