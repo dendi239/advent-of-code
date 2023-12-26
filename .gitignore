@@ -1,5 +1,6 @@
 bazel-*
 external
 compile_commands.json
+rust-project.json
 .cache/
 input.txt
