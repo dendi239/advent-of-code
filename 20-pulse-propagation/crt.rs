@@ -41,7 +41,7 @@ pub fn solve_chineese_remainder_theorem(remainders: Vec<CycleIndex>) -> CycleInd
 
     for (p, r) in prefs.iter().zip(remainders.iter()) {
         let (inv, _) = lrp_gcd(*p, r.cycle_len);
-        let mut inv = inv as i64;
+        let mut inv = inv;
         inv *= r.index % r.cycle_len;
         res.index += p * inv;
     }

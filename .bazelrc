@@ -4,3 +4,6 @@ build --cxxopt='-std=c++17'
 build --cxxopt='-DDENDI239'
 build --host_cxxopt='-std=c++17'
 build --host_cxxopt='-DDENDI239'
+
+build --aspects=@rules_rust//rust:defs.bzl%rust_clippy_aspect
+build --output_groups=+clippy_checks

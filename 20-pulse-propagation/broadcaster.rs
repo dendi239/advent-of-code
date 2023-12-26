@@ -34,12 +34,12 @@ impl<Tag: Display> Display for Command<Tag> {
 }
 
 pub trait Broadcaster<Tag> {
-    fn receive<'a>(&'a mut self, command: Command<Tag>) -> Vec<Command<Tag>>;
+    fn receive(&mut self, command: Command<Tag>) -> Vec<Command<Tag>>;
 
     fn get_state(&self) -> bool {
         false
     }
-    fn set_state(&mut self, state: bool) {}
+    fn set_state(&mut self, _state: bool) {}
 
     fn add_inbound(&mut self, _other: Tag) {}
     fn add_outbound(&mut self, _other: Tag) {}
@@ -197,8 +197,8 @@ impl Graph {
 
     pub fn get_names(&self) -> Vec<String> {
         let mut res = vec!["broadcaster".to_string()];
-        res.extend(self.flip_flops.keys().map(|x| x.clone()));
-        res.extend(self.conjunctions.keys().map(|x| x.clone()));
+        res.extend(self.flip_flops.keys().cloned());
+        res.extend(self.conjunctions.keys().cloned());
         res
     }
 
@@ -237,9 +237,9 @@ impl Graph {
             self.adjacency_list.insert(lhs.to_string(), Vec::new());
         }
 
-        self.adjacency_list
-            .get_mut(lhs)
-            .map(|links| links.push(rhs.to_string()));
+        if let Some(links) = self.adjacency_list.get_mut(lhs) {
+            links.push(rhs.to_string());
+        }
 
         Some(())
     }
@@ -257,16 +257,16 @@ impl graph::Graph<String, String> for Graph {
     }
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Default)]
 pub struct Stats {
     lows: usize,
     highs: usize,
 }
 
 impl Stats {
-    pub fn new() -> Self {
-        Self { lows: 0, highs: 0 }
-    }
+    // pub fn new() -> Self {
+    //     Self { lows: 0, highs: 0 }
+    // }
     pub fn value(&self) -> u64 {
         (self.lows as u64) * (self.highs as u64)
     }

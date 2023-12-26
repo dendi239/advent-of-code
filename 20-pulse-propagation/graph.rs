@@ -40,10 +40,12 @@ where
                 if !adj_list.contains_key(&n) {
                     adj_list.insert(n.clone(), Vec::new());
                 }
-                adj_list.get_mut(&n).map(|xs| xs.push(node.clone()));
+                if let Some(xs) = adj_list.get_mut(&n) {
+                    xs.push(node.clone());
+                }
             }
         }
-        RevGraph { adj_list: adj_list }
+        RevGraph { adj_list }
     }
 }
 
@@ -81,9 +83,9 @@ where
 }
 
 trait DFSVisitor<Node> {
-    fn on_enter(&mut self, node: &Node) {}
-    fn on_edge(&mut self, from: &Node, to: &Node) {}
-    fn on_exit(&mut self, node: &Node) {}
+    fn on_enter(&mut self, _node: &Node) {}
+    fn on_edge(&mut self, _from: &Node, _to: &Node) {}
+    fn on_exit(&mut self, _node: &Node) {}
 }
 
 enum Action<Node> {
@@ -110,7 +112,7 @@ where
     fn new(graph: &'a G) -> Self {
         Self {
             queue: Vec::new(),
-            graph: graph,
+            graph,
             used: HashSet::new(),
             phantom: PhantomData::default(),
         }
@@ -120,7 +122,7 @@ where
     where
         V: DFSVisitor<N>,
     {
-        if self.used.contains(&node) {
+        if self.used.contains(node) {
             return;
         }
 

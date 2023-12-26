@@ -39,7 +39,9 @@ impl StateFullGraph<String, String> for broadcaster::Graph {
     }
 
     fn set_state(&mut self, node: &String, state: bool) {
-        self.get_mut(node).map(|x| x.set_state(state));
+        if let Some(x) = self.get_mut(node) {
+            x.set_state(state);
+        }
     }
 }
 
@@ -81,8 +83,10 @@ fn main() -> std::io::Result<()> {
         if epoch != 0 {
             for (i, component) in condensation.components.iter().enumerate() {
                 let state = graph.get_component_state(component.iter());
-                if !component_states[i].contains_key(&state) {
-                    component_states[i].insert(state, epoch);
+                if let std::collections::hash_map::Entry::Vacant(e) =
+                    component_states[i].entry(state)
+                {
+                    e.insert(epoch);
                 } else if cycle_indices[i].cycle_len == 0 {
                     cycle_indices[i] = crt::CycleIndex::with_two_points(
                         component_states[i].get(&state).map_or(0, |x| *x),
@@ -120,7 +124,7 @@ fn main() -> std::io::Result<()> {
         .zip(cycle_indices.iter_mut())
         .for_each(|(f, idx)| {
             if *f && idx.index == 0 && idx.cycle_len != 0 {
-                (*idx).index = epoch + 1;
+                idx.index = epoch + 1;
             }
         })
     }
@@ -152,8 +156,8 @@ fn run_epoch(nodes: Vec<String>, graph: &mut broadcaster::Graph) -> Vec<bool> {
             nodes
                 .iter()
                 .enumerate()
-                .filter(|(i, n)| **n == cmd.source)
-                .for_each(|(i, f)| states[i] = true)
+                .filter(|(_, n)| **n == cmd.source)
+                .for_each(|(i, _)| states[i] = true)
         }
         if let Some(x) = graph.get_mut(&cmd.destination) {
             x.receive(cmd)
