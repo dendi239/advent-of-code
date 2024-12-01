@@ -1,0 +1,6 @@
+[tool.pyright]
+exclude = [
+    ".**/*",
+    "**/*.txt",
+    "bazel*/",
+]
