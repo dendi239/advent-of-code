@@ -88,23 +88,10 @@ void parse(Parser *p, char c) {
       _expect(&p->dont_p, 6);
       _expect(&p->mul_p, 5);
 
-      static int id_ = 0;
-      ++id_;
+      if (p->do_p == 4) p->is_enabled = true;
+      if (p->dont_p == 7) p->is_enabled = false;
 
-      if (p->do_p == 4) {
-        // std::cerr << " -- " << id_ << " --FOUND do()-- \n";
-        p->is_enabled = true;
-      }
-      if (p->dont_p == 7) {
-        // std::cerr << " -- " << id_ << " --FOUND don't()-- \n";
-        p->is_enabled = false;
-      }
-
-      if (p->mul_p == 6) {
-        if (!p->is_enabled) std::cerr << "    ";
-        std::cerr << "mul " << p->left << " " << p->right << "\n";
-        if (p->is_enabled) p->on_parsed(p->left * p->right);
-      }
+      if (p->mul_p == 6 && p->is_enabled) p->on_parsed(p->left * p->right);
 
       reset(p, ParserFull);
       break;
@@ -142,7 +129,7 @@ int main() {
   std::string line;
   std::ifstream in("2024-03-mull-it-over/input.txt");
 
-  Parser p { .on_parsed = add };
+  Parser p{.on_parsed = add};
   while (std::getline(in, line)) {
     for (char c : line) parse(&p, c);
   }

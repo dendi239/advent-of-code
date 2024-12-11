@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 
-with open("2024-12-10-hoof-it/input.txt") as f:
+with open("2024-10-hoof-it/input.txt") as f:
     grid = [line.strip() for line in f if line.strip()]
 
 n, m = len(grid), len(grid[0])

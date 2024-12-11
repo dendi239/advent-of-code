@@ -18,9 +18,7 @@ impl FromStr for Coords {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut parts = s
-            .split(',')
-            .map(|x| x.parse::<i32>().unwrap());
+        let mut parts = s.split(',').map(|x| x.parse::<i32>().unwrap());
 
         Ok(Coords {
             x: parts.next().ok_or(())?,
@@ -34,9 +32,7 @@ impl FromStr for Brick {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut parts = s
-            .split('~')
-            .map(|x| x.parse::<Coords>().unwrap());
+        let mut parts = s.split('~').map(|x| x.parse::<Coords>().unwrap());
 
         Ok(Brick {
             start: parts.next().unwrap(),
