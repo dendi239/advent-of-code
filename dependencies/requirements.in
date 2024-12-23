@@ -1,6 +1,7 @@
+networkx
 numba
 numpy
 pandas
-torch
-pyyaml
 polars
+pyyaml
+torch
